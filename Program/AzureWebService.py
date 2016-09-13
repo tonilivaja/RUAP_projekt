@@ -14,7 +14,7 @@ def getPrediction(char):
                 number+=1
         cols[i]=number
         
-    im2,contours,hierarchy = cv2.findContours(char, 1, 2)
+    im2, contours, hierarchy = cv2.findContours(char, 1, 2)
     cnt = contours[0]
     M = cv2.moments(cnt)
     if(M['m00']!=0):
@@ -40,19 +40,14 @@ def getPrediction(char):
     body = str.encode(json.dumps(data))
 
     url = 'https://ussouthcentral.services.azureml.net/workspaces/72d85169b22d4d548637997d8b94a5d0/services/194ce0186ec64d0bad247508e08e39fd/execute?api-version=2.0&details=true'
-    api_key = 'GpwM+jt2xXnRwLkr8Nr5zqn+HC9NDk16l1Hfm5BPyvhZzNGF3peZZiz2cwUDss0ItfCUZXurJm3LVK8ci61tQQ==' # Replace this with the API key for the web service
+    api_key = 'GpwM+jt2xXnRwLkr8Nr5zqn+HC9NDk16l1Hfm5BPyvhZzNGF3peZZiz2cwUDss0ItfCUZXurJm3LVK8ci61tQQ=='
     headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key)}
     req = urllib.request.Request(url, body, headers)
     try:
         response = urllib.request.urlopen(req)
 
-        # If you are using Python 3+, replace urllib2 with urllib.request in the above code:
-        # req = urllib.request.Request(url, body, headers) 
-        # response = urllib.request.urlopen(req)
-
         result = response.read()
         prediction= json.loads(result.decode())
-        #print(getPrediction(json))
         t1 = prediction['Results']
         t2 = t1['output1']
         t3 = t2['value']
@@ -62,4 +57,3 @@ def getPrediction(char):
     except urllib.request.HTTPError.error:
         print("The request failed with status code: " + str(error.code))
         return 5
-
